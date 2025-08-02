@@ -1,0 +1,14 @@
+df_duplicates = df.duplicated()  # Check for duplicates
+# Duplicates are rows that are exactly the same as another row in the DataFrame
+print("Duplicates in DataFrame:\n", df_duplicates)  # Output: boolean Series (
+# True for duplicates, False for unique rows)
+df_no_duplicates = df.drop_duplicates()  # Drop duplicate rows 
+# Display DataFrame without duplicates
+print("DataFrame after removing duplicates:\n", df_no_duplicates)  # Display DataFrame without duplicates
+df.drop_duplicates(inplace=True)  # Make changes permanent in the original DataFrame
+#drop duplicates based on specific columns
+df_no_duplicates_specific = df.drop_duplicates(subset=['age'])  # Drop duplicates based on 'age' and 'income' columns
+print("DataFrame after removing duplicates based on specific columns:\n", df_no_duplicates_specific)
+
+df.drop_duplicates(keep='first', inplace=True)  # Keep the first occurrence of duplicates
+df.drop_duplicates(keep='last', inplace=True)  # Keep the last occurrence of duplicates
