@@ -1,0 +1,143 @@
+#exploratory data analysis
+#preparing your data for analysis
+#identify the data types, coulumns, size of data set, missing values, duplicates, etc.
+
+
+# STEP 1:  understanding our data set. filtering and grouping data, sorting, etc.
+# STEP 2: Detecting and fixing missing values,outliers, encoding categorical data, etc.(data cleaning)
+# STEP 3: Data visualization (plotting graphs, charts, etc.)
+# STEP 4: find relationships between variables, correlation, etc.
+        import matplotlib.pyplot as plt
+        import pandas as pd
+        import numpy as np
+        df = pd.DataFrame({
+            'Student': ['A', 'B', 'C', 'D', 'E'],
+            'Class': [10, 10, 10, 10, 10],
+            'Gender': ['Male', 'Female', 'Male', 'Female', 'Female'],
+            'Marks1': [85, 95, 90, 82, 120],
+            'Marks2': [80, 49, 40, 84, 115],
+            'Stream': ['Science', 'Commerce', 'Commerce', 'Arts', 'Science']
+        })
+        print("data frame:")
+        print(df)
+        print("DataFrame Info:")
+        print(df.info()) 
+
+
+#GROUPING : process of splitting the data into groups based on some criteria and then applying calculations to each group.
+#why grouping? :
+        #summerize data by category and to compare groups.
+# syntax: df.groupby('column_name')
+
+        df.groupby('column)['column_to_aggregate'].operation()
+
+        print(df.groupby('Gender'))
+#find avg score of stdnts by gender
+        print("Average Marks1 by Gender:")
+        print(df.groupby('Gender')['Marks1'].mean())
+        print("sum:")
+        print(df.groupby('Stream')['Marks2'].sum())
+#count students by stream
+        print("Count of Students by Stream:")
+        print(df.groupby('Stream')['Student'].count())
+
+
+
+#OUTLIERS:
+        #Outliers are data points that differ significantly from other observations. They can skew and mislead the interpretation of results of the analysis.
+        #Outliers can be caused by variability in the measurement or may indicate experimental errors.
+        #datapoints lies outside the rabge of expected values.
+    #how to detect outliers?
+        # 1. visual method: using box plots, scatter plots, etc.(using charts)
+        # 2. statistical method : using z-score, IQR, etc.(using formulas)
+        
+data ={
+    "rno":[101,102,103,104,105,106,107,108,109,110,111,112,113,114,115],
+    "age":[1,2,3,4,-12,6,7,89,9,10,4,6,7,25,5]
+}       
+df2 = pd.DataFrame(data)
+print("data frame:")
+print(df2)
+print(df2.boxplot(column=["age"]))  # Box plot to visualize outliers
+print(plt.show())
+
+#scatter plot
+      plt.title('Scatter Plot of Age vs Roll Number') 
+      print(plt.scatter(df2['rno'], df2['age']))
+      print(plt.show())
+
+# Zscore method
+
+
+# measure how far a point is from the mean in terms of standard deviations.
+#when the point is away more than 3 points (-3 or +3)- considered as outlier.
+#STEPS:
+    # 1.calculate z-score for each data point
+    # 2.if z-score is greater than 3 or less than -3, then it is an outlier. 
+# for large distributed data, z-score is not a good method to detect outliers.
+#formula: z = (value - mean) / std
+        # shortcut method: data_frame['column'].zscore()
+
+from scipy import stats
+df2['ZScore'] = stats.zscore(df2['age'])
+print("DataFrame with Z-Score:")
+print(df2)
+
+# Filter outliers with Z-Score > 3 and < -3
+outliers = df2[(df2['ZScore'] > 3) | (df2['ZScore'] < -3)]
+print("Outliers based on Z-Score:")
+print(outliers)
+
+
+
+# IQR method
+
+# Interquartile Range (IQR) is a measure of statistical dispersion and is used to detect outliers.
+#divides data into equal parts.
+#STEPS:
+    # 1. Calculate Q1 (25th percentile) and Q3 (75th percentile)
+         # Q1 = df['column'].quantile(0.25)
+         # Q3 = df['column'].quantile(0.75)
+    # 2. Calculate IQR = Q3 - Q1
+    # 3. Determine lower bound = Q1 - 1.5 * IQR
+    # 4. Determine upper bound = Q3 + 1.5 * IQR
+    # 5. Any data point outside these bounds is considered an outlier.
+print("DataFrame with Age Column:")
+q1 = df2['age'].quantile(0.25)
+q3 = df2['age'].quantile(0.75)
+iqr = q3 - q1
+lower_bound = q1 - 1.5 * iqr
+upper_bound = q3 + 1.5 * iqr
+print("Lower Bound:", lower_bound)
+print("Upper Bound:", upper_bound)
+print("Q1:", q1)
+print("Q3:", q3)
+print("IQR:", iqr)
+print("Outliers based on IQR:")
+print(df2[(df2['age'] < lower_bound) | (df2['age'] > upper_bound)])
+
+
+
+#FIX THE OUTLIERS:
+
+# 1. capping the outlier
+     # retain the data but reduces the impact of outliers.
+     #replace ouliers
+        #--if outliers is below lower bound set it to lower bound
+        #--if outliers is above upper bound set it to upper bound
+# 2. impute the outlier(numeric-median,mean)
+# 3. remove the outlier/drop the outlier
+# transform the outlier to a normal value
+     #log, sqrt, square, etc.
+     
+#CAP:
+#syntax: df2['column'].clip(lower=lower_bound, upper=upper_bound, inplace=True)
+      df2['age'].clip(lower=lower_bound, upper=upper_bound, inplace=True)
+      print("DataFrame after Capping Outliers:")
+      print(df2)
+
+# Replace with mean or median using lowerbound and upper_bound
+      df2.loc[df2['age'] < lower_bound, 'age'] = df2['age'].mean()
+      df2.loc[df2['age'] > upper_bound, 'age'] = df2['age'].mean()
+      print("DataFrame after Replacing Outliers with Mean:")
+      print(df2)
