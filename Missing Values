@@ -1,0 +1,119 @@
+#step 1: Install necessary libraries
+# pip install pandas
+# step 2: Import libraries
+import pandas as pd
+# step 3: read and load the dataset
+# (loading csv file(comma seperated files))
+    df = pd.read_csv('customer.csv')
+    df.head(2) # Display the first two rows of the DataFrame
+
+#why data preprocessing?
+# Data preprocessing is essential to ensure that the data is clean, consistent, and suitable for analysis or machine learning tasks.
+#steps: 
+# 1. Handling missing values
+# 2. fixing missing values
+   
+
+
+#HANDLING MISSING VALUES
+#why do dataset have missing values?
+# 1. Data entry errors
+# 2. Data collection issues
+# 3. sensor malfunctions
+# 4.incompletion form/skipping questions
+# 5.loss of data while transferring or sharing
+#if data is having missing values then :
+# accuracy drops, incorrect outputs, some algorithm stops working
+
+
+#handling missing values
+# detecting, fixing
+
+# 1. Detecting missing values
+          print("Missing values in each column:\n", df.isnull()) # Check for missing values output: boolean DataFrame(true for missing, false for not missing)
+# column-wise sum of missing values
+          print("Column-wise sum of missing values:\n", df.isnull().sum())  # Count of missing values in each column. output: Series with column names as index and count of missing values as values
+#example: if column A has 2 missing values, column B has 3 missing values, then output will be:
+# A    2
+# B    3
+# using visuals
+
+
+
+#fixing missing values# 
+
+#syntax : DataFrame.fillna(value, inplace=False, method=None, axis=None, limit=None, downcast=None)
+# value: scalar, dict, Series, or DataFrame to fill missing values with
+
+#how?
+# 1. Dropping missing values(not recommended because it can lead to loss of valuable information)
+        df_dropped = df.dropna()  # Drop rows with any missing values
+        print("DataFrame after dropping missing values:\n", df_dropped)
+        df.dropna(inplace=True)  # making the changes permanent in the original DataFrame
+        df.dropna(axis=1) # Drop columns with any missing values
+
+
+# 2. Fill with default values
+# 3. Impute with mean, mode or meadian
+    # when data is numerical, we can use mean, median to fill the missing values
+    # non numerical data, we can use mode to fill the missing values
+    # when there series data - backward or forward fill
+    #how to find type of columns for imputaion
+df.info()
+
+        meanage = df['age'].mean()  # Calculate mean of 'age' column
+        meadianincome = df['income'].median()  # Calculate median of 'income' column
+        meanPA = df['purchase'].mean()  # Calculate mean of 'PA' column
+        modegender = df['gender'].mode()[0] # Calculate mode
+
+#why [0]? # because mode() returns a Series, we need the first value of that Series
+
+#3.replace missing values to make change permanent inplace = true
+        df['age'].fillna(meanage, inplace=True)  # Fill missing 'age' with mean
+        df['income'].fillna(meadianincome, inplace=True)  # Fill missing 'income' with median
+        df['gender'].fillna(modegender, inplace=True)  # Fill missing  output : male or female
+
+
+#fixing null in time series data
+
+#what is time series data?
+# Time series data is a sequence of data points collected or recorded at specific time intervals. 
+
+          data = {
+              'day' :[1, 2, 3, 4, 5, 6, 7],
+              'saleamount' : [100, 150, None, 200, None, 250, 300]
+          }
+          dfs =pd.DataFrame(data)
+#backward fill
+        dfs['saleamount'].fillna(method='bfill', inplace=True)  # Backward fill
+        print("DataFrame after backward fill:\n", dfs)
+#forward fill
+      dfs['saleamount'].fillna(method='ffill', inplace=True)  # Forward fill
+      print("DataFrame after forward fill:\n", dfs)
+      
+      df = pd.DataFrame({
+          'Student': ['A', 'B', 'C', 'D', 'E'],
+          'Class': [10, 10, 10, 10, 10],
+          'Gender': ['Male', 'Female', 'Male', 'Female', 'Female'],
+          'Marks1': [85, 95, np.nan, 82, 120],
+          'Marks2': [80, np.nan, 40, 84, 115],
+          'Stream': ['Science', 'Commerce', 'Commerce', np.nan, 'Science']
+      })
+      print("Original DataFrame:\n", df)
+
+
+      print("mean of Marks1:", df['Marks1'].mean())
+      print(df['Marks1'].mean(skipna=True))  # Skip NaN values
+      print("no of missing values in Marks1:", df['Marks1'].isnull().sum())
+      print("no of missing values in dataframe:", df.isnull().sum().sum())
+      print(df.isnull().sum())  # Count of missing values in each column
+
+#'which' method is used to fill missing values in stream
+      df['Stream'].fillna(df['Stream'].mode()[0], inplace=True)  # Fill missing values in 'Stream' with 'Unknown'
+      df['Marks1'].fillna(df['Marks1'].median(), inplace=True)  # Fill missing 'Marks1' with mean
+      df['Marks2'].fillna(df['Marks2'].median(), inplace=True)  # Fill missing 'Marks2' with mean
+      print("DataFrame after filling missing values in 'Marks1' and 'Marks2':\n", df)
+
+#students with marks greater than 90 and from science stream
+      science_students = df[(df['Marks1'] > 90) & (df['Stream'] == 'Science')]
+      print("Students with Marks1 > 90 and from Science Stream:\n", science_students)
