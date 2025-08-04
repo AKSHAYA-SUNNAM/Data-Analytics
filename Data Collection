@@ -1,0 +1,55 @@
+# read xml file
+#load as dataframe
+    dfxml = pd.read_xml('xmlfile.xml')
+    print("XML DataFrame:\n", dfxml)
+    print("First two rows of XML DataFrame:")
+    print(dfxml.head(2))
+    print("mean of age column:", dfxml['age'].mean())
+    print("information about columns", dfxml.info())
+
+
+#read json file
+#load as dataframe
+    dfjson = pd.read_json('jsonfile.json')
+    print("JSON DataFrame:\n", dfjson)
+    print("First two rows of JSON DataFrame:")
+    print(dfjson.head(2))
+    print("mean of age column:", dfjson['age'].mean())
+    print("information about columns", dfjson.info())
+
+
+#web scrapping
+    import requests
+    from bs4 import BeautifulSoup
+
+#reading from a website with table
+    url = 'https://teams.microsoft.com/l/message/19:meeting_YjMxMWYzYWYtNzNkZS00OWY4LThlMjktMzRlMDc1MzBjMzY4@thread.v2/1752832595858?context=%7B%22contextType%22%3A%22chat%22%7D'
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    print(soup)
+    print(soup.head)
+    table = soup.find('table', {'class': 'wikitable'}) 
+    df_web = pd.read_html(str(table))[0]  # Read the table into a DataFrame
+    print("Web Scraped DataFrame:\n", df_web)
+
+#with pandas
+    url="https://www.x-rates.com/table/?from=INR&amount=1"
+    df_web = pd.read_html(url)  # Read the first table from the webpage
+    print("Web Scraped DataFrame:\n", df_web[0])
+    print("no of tables:", len(df_web))
+    headings= soup.find_all('h1')
+    for heading in headings:
+        print(heading.text.strip())
+    
+     
+url="https://www.geeksforgeeks.org/python/python-web-scraping-tutorial/"
+response=requests.get(url)
+# Check the status
+print(response.status_code)
+content=BeautifulSoup(response.text,'html.parser')
+body=content.body
+print(body)
+headings=content.find_all('h2')
+for h in headings:
+    print(h.text)
+    
