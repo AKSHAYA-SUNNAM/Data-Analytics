@@ -1,0 +1,84 @@
+  import seaborn as sns
+  import matplotlib.pyplot as plt
+#types of data visualization by variables
+##univariate analysis
+##bivariate analysis
+# matplotlib --> simplest/basic or common visualization library
+# seaborn -->statistical visualization library built on top of matplotlib
+# plotly --> basic + 3d +interactive + stastistical visualization library
+
+#charts based on data types
+#-->categorical data --> bar chart, pie chart, count plot
+#--> numerical data --> histogram, boxplot, scatter plot
+
+
+#matplotlib:
+#COMMON PLOTS
+
+# 1. LINE PLOT: TIME SERIES DATA
+
+# analyse the progress of a student
+#plt.plot(x,y)
+# 2 data- bivariate
+sem = [1,2,3,4,5,6,7,8] # data changing per sem
+score=[56,45,67,78,65,68,78,89]
+ # line styles :: '-', '--', '-.', ':', 'None', ' ', '', 'solid', 'dashed', 'dashdot', 'dotted'
+plt.plot(sem,score, color="red",linewidth=4, linestyle='--',marker='o', markerfacecolor="blue", markeredgecolor="white")
+plt.title("semister wise score")
+plt.xlabel("semister")
+plt.ylabel("score")
+plt.grid(True)
+plt.show()
+# conclusion : yes there is a progress
+# how much is the progress? -- Area chart(plot with line chart)
+plt.plot(sem,score)
+plt.fill_between(sem, score)
+plt.show()
+# Interpretation : conclusion: more progress in 8th sem
+
+
+# 2. BAR GRAPH : COMPARE GROUPS / CATEGORIES THAT ARE NON NUMERIC
+# BAR PLOT
+region = ["North","South","East","West"]
+sales = [1000,1234,2321,1789]
+plt.bar(region,sales)
+plt.title("region wise sales")
+plt.xlabel("region")
+plt.ylabel("sales")
+plt.grid(True)
+plt.show()
+
+
+# 3. PIE CHART: NON- NUMERIC DATA
+    #as compared to count, show the prportion or percentage
+    #plt.pie(x,y)   
+region = ["North","South","East","West"]
+sales = [1000,1234,2321,1789]
+plt.pie(sales, labels =region, autopct='%1.1f%%')
+plt.title("region wise sales")
+plt.grid(True)
+plt.show()
+
+
+region = ["North","South","East","West"]
+sales = [1000,1234,2321,1789]
+piecolors = ['yellow','pink','lightgreen','lightblue']
+plt.pie(sales, labels=region, autopct='%1.1f%%',colors=piecolors)
+plt.show()
+
+
+
+day= [1,2,3,4,5,6,7,8,9,10]
+stock = [10.2,11.3,11,12,11.6,15,18,10.5,10.8,10.5]
+plt.plot(day,stock, color="black",linewidth=2, linestyle='-',marker='o',markersize=6, markerfacecolor="red")
+plt.title("Day wise Stockprice")
+plt.xlabel("Day")
+plt.ylabel("StockPrice")
+plt.grid(True)
+plt.show()
+
+item=["Coffee","Tea","Smoothies","Soft Drinks"]
+qty=[120,90,60,30]
+plt.title("Quantities of the Items")
+plt.pie(qty, labels=item, autopct='%1.1f%%')
+plt.show()
