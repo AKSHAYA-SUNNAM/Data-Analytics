@@ -1,0 +1,201 @@
+#HISTOGRAM--> shows the frequency of numerical variables
+#how? 
+    #--> it will divide the data into small intervals
+    #cont how many values falls into each interval
+    # we can customise the no.of intervals are called bins
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+scores = np.random.randint(20,50,70)
+# print(scores)
+
+#how many students scored 20 to 30-->histogram
+plt.hist(scores)
+plt.show()
+
+plt.hist(scores, bins=5,color="lightblue",edgecolor="blue")
+plt.title("frequency of scores")
+plt.xlabel("scores")
+plt.ylabel("freq/count")
+plt.show()
+
+## a fitness trainer is recording the daily step count of 20 clients. 
+
+## Now the trainer wants to identify how active the clients are by visualziing the steps count
+
+
+
+daily_steps = np.random.randint(3000, 12000, 20)
+count, bin_edges,_ = plt.hist(daily_steps, bins=7, edgecolor='black')  # bins can be adjusted
+plt.title("Distribution of Daily Steps")
+plt.xlabel("Steps")
+plt.ylabel("Number of Days")
+plt.show()
+print("count:",count)
+print("bin edges:",bin_edges)
+
+
+
+##SCATTER PLOT
+#--visualize the relationship or correlation b/w 2 "numerical variables"
+#-- Bivariate analysis
+#-- it can also be used to detect outliers
+#--why it is important to find relationship:
+    #helps us in identifying the important features for the models
+    #helps us in finding using one feature can we predict the values of another
+
+
+#upward
+total_bill =[100,120,130,150,170,200]
+tip=[10,15,14,18,20,22]
+plt.scatter(total_bill,tip,color="black",marker="*",s=100)
+plt.title("Total bill vs Tip")
+plt.xlabel("Total Bill")
+plt.ylabel("Tip")
+plt.show()
+
+
+#downward 
+total_bill =[100,120,130,150,170,200]
+tip=[22,20,18,14,15,10]
+plt.scatter(total_bill,tip,color="black",marker="*",s=100)
+plt.title("Total bill vs Tip")
+plt.xlabel("Total Bill")
+plt.ylabel("Tip")
+plt.show()
+
+#graph c
+total_bill =np.random.randint(100,500,20)
+tip=np.random.randint(40,80,20)
+plt.scatter(total_bill,tip,color="black",marker="*",s=100)
+plt.title("Total bill vs Tip")
+plt.xlabel("Total Bill")
+plt.ylabel("Tip")
+plt.show()
+
+
+#Interpriting the scatter plot:
+
+#--points trend upwards--1st
+    #--+ve correlation 
+    #-- if one increases other increases
+    # EX:
+        #--more study hours more scores
+        #--more hot temperature more icecream sales
+#--points trend downwards--2nd
+    # -ve correlation
+    # if one increases other decreases
+    # EX:
+        #--more instagram reels less scores
+        #--more junk food, less healthy
+#--no pattern -graph c
+    #no relation
+    #EX:
+        #--shoe size and intelligence
+        #--color of hair and salary
+# cluster 
+    #grouped observations
+#outliers
+
+#using pandas
+df= pd.DataFrame({
+    'total_bill':[100,120,130,150,170,200],
+    'tip':[10,15,14,18,20,22]
+})
+correl = df['total_bill'].corr(df['tip'])
+print("Correlation coefficient",correl)
+
+#using numpy
+total_bill =[100,120,130,150,170,200]
+tip=[10,15,14,18,20,22]
+cor = np.corrcoef(total_bill,tip)
+print("correlation coefficient",cor)
+
+#using scipy.stats
+#0.8-1.0--> strong positive correlation
+#0.5-0.8-->moderate positive correlation
+#0.0-->no correlation
+#-0.5 to -0.8 --> moderate negative correlation
+# -0.8 to -1.0--> strong negative correlation
+
+
+hours_study = [1,2,3,4,5,6,7,8,9,10]
+# marks_scored= [78,65,34,76,45,24,65,76,90,74]
+marks_scored = [30, 40, 45, 50, 60, 65, 70, 80, 85, 90]
+plt.scatter(hours_study,marks_scored,color="red",marker="*",s=100)
+plt.title(" hours_study vs marks scored")
+plt.xlabel("hours study")
+plt.ylabel("marks scored")
+plt.show()
+
+df= pd.DataFrame({
+    'hours_study':[1,2,3,4,5,6,7,8,9,10],
+    'marks_scored':[30, 40, 45, 50, 60, 65, 70, 80, 85, 90]
+})
+correl = df['hours_study'].corr(df['marks_scored'])
+print("Correlation coefficient",correl)
+
+#INTERPRETATION: Strong positive correlation
+
+
+
+#SUBPLOTS:
+
+# -->displays multiple plots in a single figure
+# side by side comparison in a form of grid(matrix)
+#fig, axs = plt.subplots(rows,cols,figsize=(width,height))
+    #fig = entire figure
+    #axs = array of axes
+    
+sem = [1, 2, 3, 4, 5, 6, 7, 8]
+attend = [5, 6, 6.5, 7, 7.2, 7.5, 8, 9]  # now has 8 values
+score = [40, 45, 50, 55, 60, 70, 75, 80]  # sample scores for histogram
+
+#1D
+fig,axes = plt.subplots(1,2, figsize=(10,4))# 1 row 2 column
+axes[0].hist(score,bins=5,color="lightblue",edgecolor="black")#left side
+axes[0].set_title("scores")
+axes[1].scatter(sem,attend,color="black")#right side
+axes[1].set_title("semister vs attendence")
+plt.show()
+
+#2D
+fig,axes = plt.subplots(2,2, figsize=(10,4))# 1 row 2 column
+axes[0,0].plot(sem,attend)# line graph
+axes[0,1].hist(score,bins=7,color="lightblue",edgecolor="black")#left side
+axes[1,0].scatter(sem,attend,color="black")#right side
+axes[1,1].bar(sem,attend) #bar graph
+plt.show()
+
+#Region Wise Sales
+# Distribution of sales
+# Relationship between sales and profit
+# Region Wise profit
+Regions=["A","B","C","D","E","F","G","H","I","J"]
+sales=np.random.randint(10000,20000,10)
+profit=np.random.randint(5,10,10)
+fig,axes = plt.subplots(2,2, figsize=(10,4))
+# Pie chart of sales by region
+axes[0, 0].pie(sales, labels=Regions, autopct='%1.1f%%')
+axes[0, 0].set_title("Sales Distribution by Region")
+
+# Scatter plot of sales vs profit
+axes[0, 1].scatter(sales, profit, color="black")
+axes[0, 1].set_title("Sales vs Profit")
+axes[0, 1].set_xlabel("Sales")
+axes[0, 1].set_ylabel("Profit")
+
+# Bar chart of profit by region
+axes[1, 0].bar(Regions, profit, color="skyblue")
+axes[1, 0].set_title("Profit by Region")
+axes[1, 0].set_xlabel("Region")
+axes[1, 0].set_ylabel("Profit")
+
+# Line plot of sales over regions
+axes[1, 1].plot(Regions, sales, marker='o', color='green')
+axes[1, 1].set_title("Sales Trend by Region")
+axes[1, 1].set_xlabel("Region")
+axes[1, 1].set_ylabel("Sales")
+
+plt.show()
+
