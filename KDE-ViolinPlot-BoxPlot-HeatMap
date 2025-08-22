@@ -1,0 +1,122 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# KDE??? --> numeric column, 2 columns
+# smooth version of histogram!
+# help us to visualise the shape of the distribution of data
+# why this is important?
+    # distribution will tells us:
+        # where most of the data points lie(peak)
+        # how spread out they are(width)
+        # whether the distribution is skewed or symmetric
+        # if multiple groups are present(multiple peaks)(multimodal)
+    #how about the shape of distribution?(interpretation!)
+        # bell shaped: normal distribution --> can be used for further analysis
+        # skewed (strechted or tail on one side)
+        #data has clusters -> 2 or more peaks 
+        # uniform (flat distribution)
+        # skewed data:
+            #right skewed: positive skewed --> most of the values are small
+            #left skewed: negative skewed --> most of the values are large
+        #impact of skewness on machine learning models:
+            # linear models: sensitive to skewed data and will give wrong predictions
+            # tree based models: less sensitive to skewnwess and can handle skewes data better
+            #clustering models: uneven clusters can lead to poor clustering results
+            # neural networks: slow or unstable training process
+# kde plot:
+titanic = sns.load_dataset("titanic")
+flights = sns.load_dataset("flights")
+tips = sns.load_dataset("tips")
+# sns.kdeplot(data=titanic,x="fare",fill=True,color="pink")
+# plt.show()
+
+
+
+
+
+
+
+
+# BOX PLOT:
+
+# to find the outliers and gives statistical summary of the data
+# median : middle value of data
+# q1: 25% of data lies below this value(lower quartile)
+# q3: 75% of data lies below this value(upper quartile)
+# q1-q3 : interquartile range(IQR)--> length of the box
+# outliers: data points that fall outside the range of q1-1.5*IQR and q3+1.5*IQR
+sns.boxplot(data=flights,x="month",medianprops={"color":"red"},whiskerprops={"color":"red"},boxprops={"color":"pink"},capprops={"color":"red"})
+plt.show()
+
+sns.boxplot(data=flights,x="passengers",medianprops={"color":"red"},whiskerprops={"color":"red"},boxprops={"color":"pink"},capprops={"color":"red"})
+plt.title("Passenger distribution")
+plt.show()
+
+# box plot of age of passengers 
+sns.boxplot(data=titanic,x="age",medianprops={"color":"red"},whiskerprops={"color":"red"},boxprops={"color":"pink"},capprops={"color":"red"})
+plt.title("Age distribution of passengers")
+plt.show()
+      # INTERPRETATION:
+        #points outside of the whiskers are outliers
+        # median shifted inside the box,whiskers are uneven--> skewed distribution
+        #tall  boxes and long whiskers -> widely spread --> model accuracy reduce--> normalise the data
+        # short boxes and short whiskers -> closely packed data --> model accuracy increase
+        
+# VOILIN PLOT: box plot +kde plot on each side of the box plot
+
+sns.violinplot(data=titanic,x="pclass", y="fare",hue="who")
+plt.show()
+sns.violinplot(data=titanic,x="pclass", y="fare")
+plt.show()
+### 
+#--> thin white line:median
+# not always visible because of kde plot- outliers 
+#--> thick black line: interquartile range(IQR) - inside the box
+sns.violinplot(data=tips,x="total_bill")
+plt.show()
+# voilin plot for fare of the flights:
+sns.violinplot(data=titanic,x="fare", inner="box",palette="pink")
+plt.show()
+sns.violinplot(data=titanic,x="fare", inner="quartile")
+plt.show()
+sns.violinplot(data=titanic,x="fare", inner="stick")
+plt.show()
+# plot a violin plot for passengers of fligts separated by month
+sns.violinplot(data=flights,x="month",y="passengers", inner="box",palette="pink")
+plt.show()
+# plot a violin plot for month of fligts separated by month
+sns.violinplot(data=flights,x="month",inner="box",palette="pink")
+plt.show()
+# boxplot-> quick statistical summary+outliers
+# kde --> find the underlying distribution
+# voilin plot --> both summary and distrbution
+
+
+
+
+
+
+
+
+#HEAT MAP:
+# it works with numeric data
+# if any non numeric data-> encode it(one shot/label encoding/drop columns)
+#visual representation of data in matrix form
+# color intensity represents the magnitude of the value
+# used for: 
+    # correlation matrix
+corr = titanic.corr(numeric_only=True)
+sns.heatmap(corr,annot=True, cmap="YlGnBu")
+plt.title("Correlation heatmap")
+plt.show()
+
+
+#for tips dataset
+corr = tips.corr(numeric_only=True)
+sns.heatmap(corr, annot=True, fmt=".2f", cbar_kws={"shrink": .8})
+plt.title("Correlation heatmap")
+plt.show()
+
+
+
+
